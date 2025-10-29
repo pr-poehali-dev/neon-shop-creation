@@ -26,15 +26,11 @@ interface CartItem extends Product {
 }
 
 const categories = [
-  { id: 1, name: '3D Принтеры', icon: 'Box', color: 'text-[hsl(var(--neon-cyan))]', items: ['FDM принтеры', 'SLA принтеры', 'Расходники'] },
-  { id: 2, name: 'Смартфоны', icon: 'Smartphone', color: 'text-[hsl(var(--neon-purple))]', items: ['Android', 'iOS', 'Аксессуары'] },
-  { id: 3, name: 'Ноутбуки', icon: 'Laptop', color: 'text-[hsl(var(--neon-pink))]', items: ['Игровые', 'Офисные', 'Ультрабуки'] },
-  { id: 4, name: 'Компьютеры', icon: 'Monitor', color: 'text-[hsl(var(--neon-cyan))]', items: ['Gaming PC', 'Workstation', 'Компоненты'] },
-  { id: 5, name: 'Аудио', icon: 'Headphones', color: 'text-[hsl(var(--neon-purple))]', items: ['Наушники', 'Колонки', 'Микрофоны'] },
-  { id: 6, name: 'Видео', icon: 'Video', color: 'text-[hsl(var(--neon-pink))]', items: ['Камеры', 'Веб-камеры', 'Дроны'] },
-  { id: 7, name: 'Умный дом', icon: 'Home', color: 'text-[hsl(var(--neon-cyan))]', items: ['Освещение', 'Безопасность', 'Климат'] },
-  { id: 8, name: 'Геймпады', icon: 'Gamepad2', color: 'text-[hsl(var(--neon-purple))]', items: ['Xbox', 'PlayStation', 'PC'] },
-  { id: 9, name: 'Аксессуары', icon: 'Cable', color: 'text-[hsl(var(--neon-pink))]', items: ['Кабели', 'Зарядки', 'Чехлы'] }
+  { id: 1, name: 'Для мототехники', icon: 'Bike', color: 'text-[hsl(var(--neon-cyan))]', items: ['Безопасность', 'Аксессуары', 'Управление', '3D печать'] },
+  { id: 2, name: 'Умный дом', icon: 'Home', color: 'text-[hsl(var(--neon-purple))]', items: ['Климат', 'Безопасность', 'Управление'] },
+  { id: 3, name: 'Ремонт и строительство', icon: 'Wrench', color: 'text-[hsl(var(--neon-pink))]', items: ['Органайзеры', 'Устройства'] },
+  { id: 4, name: 'Дом и быт', icon: 'Lamp', color: 'text-[hsl(var(--neon-cyan))]', items: ['Аксессуары', 'Светильники', '3D печать'] },
+  { id: 5, name: 'Наши проекты', icon: 'Lightbulb', color: 'text-[hsl(var(--neon-purple))]', items: ['Заказы', 'Изделия'] }
 ];
 
 const mockProducts: Product[] = [
@@ -179,8 +175,8 @@ const Index = () => {
               <h1 className="text-3xl font-bold text-[hsl(var(--neon-cyan))] neon-glow">
                 CYBER TECH
               </h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                Авторские устройства, органайзеры и электронные решения
+              <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
+                Авторские устройства, органайзеры и электронные решения, созданные для тех, кто ценит порядок, надёжность и технологичность. Мы объединяем механику, электронику и практичность в каждом продукте.
               </p>
             </div>
             
@@ -255,16 +251,84 @@ const Index = () => {
                         </Card>
                       ))}
                       
-                      <div className="border-t border-[hsl(var(--neon-cyan))] pt-4 space-y-2">
+                      <div className="border-t border-[hsl(var(--neon-cyan))] pt-4 space-y-3">
                         <div className="flex justify-between text-lg">
                           <span>Итого:</span>
                           <span className="text-[hsl(var(--neon-cyan))] font-bold">{totalPrice.toLocaleString()} ₽</span>
                         </div>
+                        
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button className="w-full bg-[hsl(var(--neon-purple))] text-black hover:bg-[hsl(var(--neon-pink))] neon-border">
+                              Оформить заказ
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="bg-card border-[hsl(var(--neon-cyan))] max-w-md">
+                            <DialogHeader>
+                              <DialogTitle className="text-2xl text-[hsl(var(--neon-cyan))]">Оформление заказа</DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                              <div>
+                                <label className="text-sm font-medium text-foreground mb-2 block">Ваше имя</label>
+                                <Input placeholder="Иван Иванов" className="bg-input border-[hsl(var(--neon-cyan))]" />
+                              </div>
+                              <div>
+                                <label className="text-sm font-medium text-foreground mb-2 block">Телефон</label>
+                                <Input placeholder="+7 (999) 123-45-67" className="bg-input border-[hsl(var(--neon-cyan))]" />
+                              </div>
+                              <div>
+                                <label className="text-sm font-medium text-foreground mb-2 block">Email</label>
+                                <Input placeholder="example@mail.ru" type="email" className="bg-input border-[hsl(var(--neon-cyan))]" />
+                              </div>
+                              <div>
+                                <label className="text-sm font-medium text-foreground mb-2 block">Адрес доставки</label>
+                                <Input placeholder="г. Москва, ул. Ленина, д. 1" className="bg-input border-[hsl(var(--neon-cyan))]" />
+                              </div>
+                              
+                              <div className="border-t border-[hsl(var(--neon-cyan))]/30 pt-4">
+                                <h4 className="font-bold text-[hsl(var(--neon-purple))] mb-3">Способ оплаты</h4>
+                                <div className="space-y-2">
+                                  <Button
+                                    variant="outline"
+                                    className="w-full justify-start border-[hsl(var(--neon-cyan))] text-foreground hover:bg-[hsl(var(--neon-cyan))]/10"
+                                    onClick={quickOrder}
+                                  >
+                                    <Icon name="CreditCard" size={20} className="mr-2 text-[hsl(var(--neon-cyan))]" />
+                                    Банковская карта
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    className="w-full justify-start border-[hsl(var(--neon-cyan))] text-foreground hover:bg-[hsl(var(--neon-cyan))]/10"
+                                    onClick={quickOrder}
+                                  >
+                                    <Icon name="Wallet" size={20} className="mr-2 text-[hsl(var(--neon-purple))]" />
+                                    СБП (Система быстрых платежей)
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    className="w-full justify-start border-[hsl(var(--neon-cyan))] text-foreground hover:bg-[hsl(var(--neon-cyan))]/10"
+                                    onClick={quickOrder}
+                                  >
+                                    <Icon name="Banknote" size={20} className="mr-2 text-[hsl(var(--neon-pink))]" />
+                                    Наличными при получении
+                                  </Button>
+                                </div>
+                              </div>
+                              
+                              <div className="flex justify-between text-lg font-bold pt-2">
+                                <span>К оплате:</span>
+                                <span className="text-[hsl(var(--neon-cyan))]">{totalPrice.toLocaleString()} ₽</span>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                        
                         <Button
-                          className="w-full bg-[hsl(var(--neon-purple))] text-black hover:bg-[hsl(var(--neon-pink))] neon-border"
+                          variant="outline"
+                          className="w-full border-[hsl(var(--neon-cyan))] text-[hsl(var(--neon-cyan))]"
                           onClick={quickOrder}
                         >
-                          Заказ в 1 клик
+                          Быстрый заказ (звонок менеджера)
                         </Button>
                       </div>
                     </>
@@ -282,7 +346,7 @@ const Index = () => {
             Каталог товаров
           </h2>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-9 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
             {categories.map((category, index) => (
               <Card
                 key={category.id}
@@ -511,9 +575,51 @@ const Index = () => {
       </Dialog>
 
       <footer className="border-t border-[hsl(var(--neon-cyan))] bg-card/50 backdrop-blur-lg mt-16">
-        <div className="container mx-auto px-4 py-8 text-center">
-          <p className="text-[hsl(var(--neon-cyan))] neon-glow">CYBER TECH © 2025</p>
-          <p className="text-muted-foreground text-sm mt-2">Технологии будущего уже сегодня</p>
+        <div className="container mx-auto px-4 py-8">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <h3 className="text-xl font-bold text-[hsl(var(--neon-cyan))] neon-glow mb-4">CYBER TECH</h3>
+              <p className="text-muted-foreground text-sm">
+                Авторские устройства и электронные решения для современной жизни
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="font-bold text-[hsl(var(--neon-purple))] mb-3">Контакты</h4>
+              <div className="space-y-2 text-sm text-foreground">
+                <div className="flex items-center gap-2">
+                  <Icon name="Phone" size={16} className="text-[hsl(var(--neon-cyan))]" />
+                  <a href="tel:+79991234567" className="hover:text-[hsl(var(--neon-cyan))] transition-colors">
+                    +7 (999) 123-45-67
+                  </a>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="Mail" size={16} className="text-[hsl(var(--neon-cyan))]" />
+                  <a href="mailto:info@cybertech.ru" className="hover:text-[hsl(var(--neon-cyan))] transition-colors">
+                    info@cybertech.ru
+                  </a>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Icon name="MapPin" size={16} className="text-[hsl(var(--neon-cyan))] mt-0.5" />
+                  <span>г. Москва, ул. Технологическая, д. 42</span>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-bold text-[hsl(var(--neon-purple))] mb-3">Режим работы</h4>
+              <div className="space-y-1 text-sm text-foreground">
+                <p>Пн-Пт: 10:00 - 20:00</p>
+                <p>Сб: 11:00 - 18:00</p>
+                <p>Вс: выходной</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-t border-[hsl(var(--neon-cyan))]/30 pt-6 text-center">
+            <p className="text-[hsl(var(--neon-cyan))] neon-glow">CYBER TECH © 2025</p>
+            <p className="text-muted-foreground text-sm mt-2">Технологии будущего уже сегодня</p>
+          </div>
         </div>
       </footer>
     </div>
