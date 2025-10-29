@@ -173,12 +173,18 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-[hsl(var(--neon-cyan))] bg-card/50 backdrop-blur-lg sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-[hsl(var(--neon-cyan))] neon-glow">
-            CYBER TECH
-          </h1>
-          
-          <div className="flex items-center gap-4">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <h1 className="text-3xl font-bold text-[hsl(var(--neon-cyan))] neon-glow">
+                CYBER TECH
+              </h1>
+              <p className="text-sm text-muted-foreground mt-1">
+                Авторские устройства, органайзеры и электронные решения
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-4">
             <div className="relative w-96 hidden md:block">
               <Icon name="Search" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[hsl(var(--neon-cyan))]" size={20} />
               <Input
