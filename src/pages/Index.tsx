@@ -107,16 +107,14 @@ const Index = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 300000]);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [showImageGallery, setShowImageGallery] = useState(false);
 
   const filteredProducts = mockProducts.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = !selectedCategory || product.category === categories.find(c => c.id === selectedCategory)?.name;
-    const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
-    const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
-    return matchesSearch && matchesCategory && matchesPrice && matchesBrand;
+    return matchesSearch && matchesCategory;
   });
 
   const addToCart = (product: Product) => {
@@ -158,13 +156,11 @@ const Index = () => {
     setCart([]);
   };
 
-  const toggleBrand = (brand: string) => {
-    setSelectedBrands(prev =>
-      prev.includes(brand) ? prev.filter(b => b !== brand) : [...prev, brand]
-    );
-  };
-
-  const brands = Array.from(new Set(mockProducts.map(p => p.brand)));
+  const productImages = [
+    '/placeholder.svg',
+    '/placeholder.svg',
+    '/placeholder.svg'
+  ];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -375,54 +371,7 @@ const Index = () => {
           </div>
         </section>
 
-        <section className="mb-8">
-          <Card className="p-6 bg-card border-[hsl(var(--neon-cyan))]">
-            <h3 className="text-xl font-bold mb-4 text-[hsl(var(--neon-cyan))]">Фильтры</h3>
-            <Tabs defaultValue="price" className="w-full">
-              <TabsList className="bg-muted">
-                <TabsTrigger value="price">Цена</TabsTrigger>
-                <TabsTrigger value="brand">Бренд</TabsTrigger>
-              </TabsList>
-              <TabsContent value="price" className="space-y-4">
-                <div className="flex gap-4 items-center">
-                  <Input
-                    type="number"
-                    placeholder="От"
-                    value={priceRange[0]}
-                    onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                    className="bg-input border-[hsl(var(--neon-cyan))]"
-                  />
-                  <span>—</span>
-                  <Input
-                    type="number"
-                    placeholder="До"
-                    value={priceRange[1]}
-                    onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                    className="bg-input border-[hsl(var(--neon-cyan))]"
-                  />
-                </div>
-              </TabsContent>
-              <TabsContent value="brand" className="space-y-2">
-                <div className="flex flex-wrap gap-2">
-                  {brands.map(brand => (
-                    <Badge
-                      key={brand}
-                      variant={selectedBrands.includes(brand) ? "default" : "outline"}
-                      className={`cursor-pointer ${
-                        selectedBrands.includes(brand)
-                          ? 'bg-[hsl(var(--neon-purple))] text-black'
-                          : 'border-[hsl(var(--neon-cyan))] text-[hsl(var(--neon-cyan))]'
-                      }`}
-                      onClick={() => toggleBrand(brand)}
-                    >
-                      {brand}
-                    </Badge>
-                  ))}
-                </div>
-              </TabsContent>
-            </Tabs>
-          </Card>
-        </section>
+
 
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -483,8 +432,36 @@ const Index = () => {
                 <DialogTitle className="text-2xl text-[hsl(var(--neon-cyan))]">{selectedProduct.name}</DialogTitle>
               </DialogHeader>
               <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <img src={selectedProduct.image} alt={selectedProduct.name} className="w-full rounded-lg" />
+                <div className="space-y-4">
+                  <div 
+                    className="relative cursor-pointer group overflow-hidden rounded-lg"
+                    onClick={() => setShowImageGallery(true)}
+                  >
+                    <img 
+                      src={productImages[selectedImageIndex]} 
+                      alt={selectedProduct.name} 
+                      className="w-full rounded-lg transition-transform group-hover:scale-105" 
+                    />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <Icon name="ZoomIn" size={48} className="text-[hsl(var(--neon-cyan))]" />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-3 gap-2">
+                    {productImages.map((img, idx) => (
+                      <div
+                        key={idx}
+                        className={`cursor-pointer rounded overflow-hidden border-2 transition-all ${
+                          selectedImageIndex === idx
+                            ? 'border-[hsl(var(--neon-cyan))] neon-border'
+                            : 'border-muted hover:border-[hsl(var(--neon-purple))]'
+                        }`}
+                        onClick={() => setSelectedImageIndex(idx)}
+                      >
+                        <img src={img} alt={`${selectedProduct.name} ${idx + 1}`} className="w-full h-20 object-cover" />
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 <div className="space-y-4">
                   <div>
@@ -572,6 +549,55 @@ const Index = () => {
               </div>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showImageGallery} onOpenChange={setShowImageGallery}>
+        <DialogContent className="bg-card border-[hsl(var(--neon-cyan))] max-w-4xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl text-[hsl(var(--neon-cyan))]">Галерея изображений</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="relative">
+              <img 
+                src={productImages[selectedImageIndex]} 
+                alt="Product" 
+                className="w-full h-auto rounded-lg"
+              />
+              <Button
+                variant="outline"
+                size="icon"
+                className="absolute left-4 top-1/2 -translate-y-1/2 border-[hsl(var(--neon-cyan))] bg-black/50 text-[hsl(var(--neon-cyan))]"
+                onClick={() => setSelectedImageIndex((prev) => (prev - 1 + productImages.length) % productImages.length)}
+              >
+                <Icon name="ChevronLeft" size={24} />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="absolute right-4 top-1/2 -translate-y-1/2 border-[hsl(var(--neon-cyan))] bg-black/50 text-[hsl(var(--neon-cyan))]"
+                onClick={() => setSelectedImageIndex((prev) => (prev + 1) % productImages.length)}
+              >
+                <Icon name="ChevronRight" size={24} />
+              </Button>
+            </div>
+            
+            <div className="grid grid-cols-6 gap-2">
+              {productImages.map((img, idx) => (
+                <div
+                  key={idx}
+                  className={`cursor-pointer rounded overflow-hidden border-2 transition-all ${
+                    selectedImageIndex === idx
+                      ? 'border-[hsl(var(--neon-cyan))] neon-border'
+                      : 'border-muted hover:border-[hsl(var(--neon-purple))]'
+                  }`}
+                  onClick={() => setSelectedImageIndex(idx)}
+                >
+                  <img src={img} alt={`View ${idx + 1}`} className="w-full h-16 object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 
